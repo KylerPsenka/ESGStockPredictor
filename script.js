@@ -16,6 +16,7 @@ async function fetchData() {
   try {
     const response = await fetch(`${backendURL}/api/stock?ticker=${ticker}`);
     const data = await response.json();
+    print(data)
 
     if (data.error) {
       alert(data.error);
