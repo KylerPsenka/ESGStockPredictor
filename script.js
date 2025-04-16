@@ -14,7 +14,7 @@ tickers.forEach(ticker => {
 async function fetchData() {
   const ticker = select.value;
   try {
-    const response = await fetch(`${backendURL}?ticker=${ticker}`);
+    const response = await fetch(`${backendURL}/api/stock?ticker=${ticker}`);
     const data = await response.json();
 
     if (data.error) {
