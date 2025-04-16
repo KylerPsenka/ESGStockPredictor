@@ -1,4 +1,4 @@
-const backendURL = "https://esg-backend.onrender.com"; // Replace this with your real backend URL
+const backendURL = "https://esgbackendpyt.onrender.com"; // Replace this with your real backend URL
 
 // You can also fetch tickers dynamically from another endpoint
 const tickers = ['AAPL', 'TSLA', 'GOOGL', 'MSFT', 'AMZN'];
