@@ -43,6 +43,14 @@ async function fetchData() {
     const soc = validESG.map(e => parseFloat(e.Social_Score));
     const gov = validESG.map(e => parseFloat(e.Governance_Score));
 
+
+    console.log("Stock years:", years);
+    console.log("Stock prices:", prices);
+    console.log("ESG years:", esgYears);
+    console.log("ESG:", esg);
+    console.log("Env:", env);
+    console.log("Soc:", soc);
+    console.log("Gov:", gov);
     // Plot stock prices
     Plotly.newPlot('priceChart', [{
       x: years,
@@ -56,7 +64,7 @@ async function fetchData() {
     // Plot ESG breakdown
     Plotly.newPlot('esgChart', [
       { x: esgYears, y: esg, name: 'ESG', type: 'scatter' },
-      { x: esgYears, y: env, name: 'Environmental', type: 'scatter' },
+      { x: esgYears, y: env, name: 'Enviornmental', type: 'scatter' },  // match backend spelling
       { x: esgYears, y: soc, name: 'Social', type: 'scatter' },
       { x: esgYears, y: gov, name: 'Governance', type: 'scatter' }
     ], {
