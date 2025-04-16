@@ -16,22 +16,34 @@ async function fetchData() {
   try {
     const response = await fetch(`${backendURL}/api/stock?ticker=${ticker}`);
     const data = await response.json();
-    print(data)
 
     if (data.error) {
       alert(data.error);
       return;
     }
 
-    const years = data.stock_prices.map(p => p.Year);
-    const prices = data.stock_prices.map(p => p.Price);
+    // Filter stock prices: remove rows with missing price
+    const validStock = data.stock_prices.filter(
+      p => p["Price at beginning of year"] !== null &&
+           p["Price at beginning of year"] !== "#N/A Field Not Applicable" &&
+           !isNaN(parseFloat(p["Price at beginning of year"]))
+    );
+    const years = validStock.map(p => p.Year);
+    const prices = validStock.map(p => parseFloat(p["Price at beginning of year"]));
 
-    const esgYears = data.esg_scores.map(e => e.Year);
-    const esg = data.esg_scores.map(e => e.ESG);
-    const env = data.esg_scores.map(e => e.Env);
-    const soc = data.esg_scores.map(e => e.Soc);
-    const gov = data.esg_scores.map(e => e.Gov);
+    // Filter ESG scores: keep only rows with valid numbers
+    const validESG = data.esg_scores.filter(e =>
+      ![e.ESG_Score, e.Enviornmental_Score, e.Social_Score, e.Governance_Score].some(
+        v => v === null || v === "#N/A Field Not Applicable" || isNaN(parseFloat(v))
+      )
+    );
+    const esgYears = validESG.map(e => e.Year);
+    const esg = validESG.map(e => parseFloat(e.ESG_Score));
+    const env = validESG.map(e => parseFloat(e.Enviornmental_Score));
+    const soc = validESG.map(e => parseFloat(e.Social_Score));
+    const gov = validESG.map(e => parseFloat(e.Governance_Score));
 
+    // Plot stock prices
     Plotly.newPlot('priceChart', [{
       x: years,
       y: prices,
@@ -41,6 +53,7 @@ async function fetchData() {
       title: `${ticker} Stock Price (2018–2025)`
     });
 
+    // Plot ESG breakdown
     Plotly.newPlot('esgChart', [
       { x: esgYears, y: esg, name: 'ESG', type: 'scatter' },
       { x: esgYears, y: env, name: 'Environmental', type: 'scatter' },
@@ -51,6 +64,7 @@ async function fetchData() {
       legend: { orientation: 'h' }
     });
 
+    // Show predictions
     const pred = data.prediction;
     document.getElementById('predictionBox').innerHTML = `
       <h2>📈 Predicted Price Change</h2>
@@ -64,8 +78,4 @@ async function fetchData() {
     console.error(err);
     alert('Failed to fetch data. Check console for details.');
   }
-}
-
-function formatPrediction(pred) {
-  return `${(pred.change * 100).toFixed(2)}% change, ${(pred.confidence * 100).toFixed(1)}% confidence`;
 }
