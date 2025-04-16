@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stock & ESG Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Stock & ESG Dashboard</h1>
+
+    <label for="tickerSelect">Select a stock ticker:</label>
+    <select id="tickerSelect">
+      <!-- Options will be added dynamically -->
+    </select>
+    <button onclick="fetchData()">Get Data</button>
+
+    <div id="charts">
+      <div id="priceChart"></div>
+      <div id="esgChart"></div>
+    </div>
+
+    <div id="predictionBox"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
