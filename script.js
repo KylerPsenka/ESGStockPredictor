@@ -1,6 +1,6 @@
-const backendURL = "https://esgbackendpyt.onrender.com"; // Replace this with your real backend URL
+const backendURL = "https://esgbackendpyt.onrender.com"; 
 
-// You can also fetch tickers dynamically from another endpoint
+
 const tickers = ['AAPL', 'TSLA', 'GOOGL', 'MSFT', 'AMZN'];
 const select = document.getElementById('tickerSelect');
 
@@ -22,7 +22,6 @@ async function fetchData() {
       return;
     }
 
-    // Filter stock prices: remove rows with missing price
     const validStock = data.stock_prices.filter(
       p => p["Price at beginning of year"] !== null &&
            p["Price at beginning of year"] !== "#N/A Field Not Applicable" &&
@@ -31,7 +30,6 @@ async function fetchData() {
     const years = validStock.map(p => p.Year);
     const prices = validStock.map(p => parseFloat(p["Price at beginning of year"]));
 
-    // Filter ESG scores: keep only rows with valid numbers
     const validESG = data.esg_scores.filter(e =>
       ![e.ESG_Score, e.Enviornmental_Score, e.Social_Score, e.Governance_Score].some(
         v => v === null || v === "#N/A Field Not Applicable" || isNaN(parseFloat(v))
@@ -61,7 +59,6 @@ async function fetchData() {
       title: `${ticker} Stock Price (2018–2025)`
     });
 
-    // Plot ESG breakdown
     Plotly.newPlot('esgChart', [
       { x: esgYears, y: esg, name: 'ESG', type: 'scatter' },
       { x: esgYears, y: env, name: 'Enviornmental', type: 'scatter' },  // match backend spelling
@@ -72,7 +69,6 @@ async function fetchData() {
       legend: { orientation: 'h' }
     });
 
-    // Show predictions
     const pred = data.prediction;
     document.getElementById('predictionBox').innerHTML = `
       <h2>📈 Predicted Price Change</h2>
